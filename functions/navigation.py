@@ -118,7 +118,7 @@ def popularity(kw):
 
 # -------------------------------------------------------------------------------------
 
-def getinfoBox(URL):
+def getinfoBox(url):
     r = requests.get(url)
     soup = BeautifulSoup(r.text, "lxml")
     tbl = soup.find("table", {"class": "infobox vevent"})
