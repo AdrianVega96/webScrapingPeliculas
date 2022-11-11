@@ -46,7 +46,6 @@ wikiMovieList.to_csv('WikiMovieList.csv')
 
 merged_dataframe = format.catalog_and_wikipedia_merge(dataFramePDFs, wikiMovieList)
 
-None
 ##################################################  Experiment ##########################################
 #trend={}
 #for index, row in DataFramePDFs.iterrows():
