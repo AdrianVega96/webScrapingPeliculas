@@ -56,9 +56,20 @@ for i, row in merged_dataframe.iterrows():
         print(f"Index {a} | Película: {row['spa_title']} | URL: {row['wiki_url']}")
         wikiBox = navigation.getinfoBox(wikiBaseURL+row['wiki_url'])
         Info = {k: format.cleanBox(v) for k, v in wikiBox.items() if v}
-        wikipediaInfo = pd.concat([wikipediaInfo, pd.DataFrame(Info.items()).transpose()], axis=0)
+        Info = pd.DataFrame(Info.items()).transpose()
+        new_header = Info.iloc[0]  # grab the first row for the header
+        Info = Info[1:]  # take the data less the header row
+        Info.columns = new_header  # set the header row as the df header
+        Info['year'] = row['year']
+        Info['spa_title'] = row['spa_title']
+        Info['eng_title'] = row['eng_title']
+        wikipediaInfo = pd.concat([wikipediaInfo, Info], axis=0, ignore_index=True)
 
-boxInfo
+finalDataframe = pd.merge(merged_dataframe, wikipediaInfo, on=['spa_title', 'year'], how='left')
+finalDataframe = pd.merge(finalDataframe, wikipediaInfo, on=['eng_title', 'year'], how='left')
+finalDataframe = finalDataframe.drop_duplicates()
+
+None
 
 ##################################################  Experiment ##########################################
 #trend={}
