@@ -134,21 +134,9 @@ def getinfoBox(url):
                 ToClean[f"Element{i}"] = ""
             else:
                 ToClean[th.text] = td.text
+    return ToClean
 
 # -------------------------------------------------------------------------------------
-
-def cleanBox(v):
-    clean=re.sub("[\(\[].*?[\)\]]", "", v)
-    clean=re.sub("million", "M", clean)
-    clean = re.sub("^\s+|\s+$", "",clean)
-    clean=list(filter(None,clean.splitlines()))
-    return  clean
-
-    Info={k: cleanBox(v) for k, v in ToClean.items() if  v}
-    return Info
-
-# --------------------------------------------------------------------------------------------
-
 
 def WikiList():
     year=list(range(2009,2016))

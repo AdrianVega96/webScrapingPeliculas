@@ -66,3 +66,13 @@ def catalog_and_wikipedia_merge(gob_catalog_dataframe, wiki_dataframe):
     films_with_wiki_url.drop(['Link_x', 'Link_y'], axis=1, inplace=True)
     films_with_wiki_url.fillna('', inplace=True)
     return films_with_wiki_url.drop_duplicates()
+
+def cleanBox(v):
+    clean = re.sub("[\(\[].*?[\)\]]", "", v)
+    clean = re.sub("million", "M", clean)
+    clean = re.sub("^\s+|\s+$", "",clean)
+    clean = list(filter(None,clean.splitlines()))
+    return clean
+
+    Info = {k: cleanBox(v) for k, v in ToClean.items() if v}
+    return Info

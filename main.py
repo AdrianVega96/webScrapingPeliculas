@@ -46,6 +46,19 @@ wikiMovieList.to_csv('WikiMovieList.csv')
 
 merged_dataframe = format.catalog_and_wikipedia_merge(dataFramePDFs, wikiMovieList)
 
+print('Getting box info from each film')
+a = 0
+wikiBaseURL = 'https://en.wikipedia.org/'
+for i, row in merged_dataframe.items():
+    if row['wiki_url'] != "":
+        a = a + 1
+        print(f"Index {a} | Película: {row['spa_title']} | URL: {row['wiki_url']}")
+        wikiBox = format.getinfoBox(wikiBaseURL+row['wiki_url'])
+        Info = {k: format.cleanBox(v) for k, v in wikiBox.items() if v}
+        None
+
+boxInfo
+
 ##################################################  Experiment ##########################################
 #trend={}
 #for index, row in DataFramePDFs.iterrows():
