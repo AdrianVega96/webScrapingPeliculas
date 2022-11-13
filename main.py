@@ -49,13 +49,14 @@ merged_dataframe = format.catalog_and_wikipedia_merge(dataFramePDFs, wikiMovieLi
 print('Getting box info from each film')
 a = 0
 wikiBaseURL = 'https://en.wikipedia.org/'
+wikipediaInfo = pd.DataFrame()
 for i, row in merged_dataframe.iterrows():
     if row['wiki_url'] != "":
         a = a + 1
         print(f"Index {a} | Película: {row['spa_title']} | URL: {row['wiki_url']}")
         wikiBox = navigation.getinfoBox(wikiBaseURL+row['wiki_url'])
         Info = {k: format.cleanBox(v) for k, v in wikiBox.items() if v}
-        None
+        wikipediaInfo = pd.concat([wikipediaInfo, pd.DataFrame(Info.items()).transpose()], axis=0)
 
 boxInfo
 
