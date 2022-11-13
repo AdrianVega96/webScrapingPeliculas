@@ -66,7 +66,6 @@ for i, row in merged_dataframe.iterrows():
         wikipediaInfo = pd.concat([wikipediaInfo, Info], axis=0, ignore_index=True)
 
 finalDataframe = pd.merge(merged_dataframe, wikipediaInfo, on=['spa_title', 'eng_title', 'year'], how='left')
-finalDataframe = finalDataframe.drop_duplicates()
 
 None
 
