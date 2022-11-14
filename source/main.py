@@ -65,9 +65,7 @@ for i, row in wikiMovieList.iterrows():
 
 merged_dataframe = format.catalog_and_wikipedia_merge(dataFramePDFs, wikipediaInfo)
 
-finalDataframe = pd.merge(merged_dataframe, wikipediaInfo, on=['spa_title', 'eng_title', 'year'], how='left')
-
-None
+merged_dataframe.to_csv('dataset/dataset.csv')
 
 ##################################################  Experiment ##########################################
 #trend={}
