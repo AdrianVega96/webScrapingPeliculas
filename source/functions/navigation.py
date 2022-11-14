@@ -122,18 +122,20 @@ def getinfoBox(url):
     r = requests.get(url)
     soup = BeautifulSoup(r.text, "lxml")
     tbl = soup.find("table", {"class": "infobox vevent"})
+    if tbl is not None:
+        list_of_table_rows = tbl.findAll('tr')
+        ToClean = {}
+        for i, tr in enumerate(list_of_table_rows):
 
-    list_of_table_rows = tbl.findAll('tr')
-    ToClean = {}
-    for i,tr in enumerate(list_of_table_rows):
+                th = tr.find("th")
+                td = tr.find("td")
 
-            th = tr.find("th")
-            td = tr.find("td")
-
-            if (th is None) or (td is None):
-                ToClean[f"Element{i}"] = ""
-            else:
-                ToClean[th.text] = td.text
+                if (th is None) or (td is None):
+                    ToClean[f"Element{i}"] = ""
+                else:
+                    ToClean[th.text] = td.text
+    else:
+        return None
     return ToClean
 
 # -------------------------------------------------------------------------------------

@@ -61,11 +61,7 @@ def catalog_and_wikipedia_merge(gob_catalog_dataframe, wiki_dataframe):
     films_with_wiki_url = pd.merge(gob_catalog_dataframe, wiki_dataframe, on=['spa_title', 'year'], how='left')
     wiki_dataframe.rename(columns={'spa_title': 'eng_title'}, inplace=True)
     films_with_wiki_url = pd.merge(films_with_wiki_url, wiki_dataframe, on=['eng_title', 'year'], how='left')
-    films_with_wiki_url['wiki_url'] = films_with_wiki_url.apply(lambda x: x['Link_y'] if pd.isna(x['Link_x'])
-                                                                else x['Link_x'], axis=1)
-    films_with_wiki_url.drop(['Link_x', 'Link_y'], axis=1, inplace=True)
-    films_with_wiki_url.fillna('', inplace=True)
-    return films_with_wiki_url.drop_duplicates()
+    return films_with_wiki_url
 
 def cleanBox(v):
     clean = re.sub("[\(\[].*?[\)\]]", "", v)

@@ -41,29 +41,29 @@ for year, ulrss in pdflinks:
 dataFramePDFs.to_csv('films.csv')
 
 ##########################################  Scrappear Wikipedia  ################################################
-wikiMovieList= navigation.WikiList()
+wikiMovieList = navigation.WikiList()
 wikiMovieList.to_csv('WikiMovieList.csv')
 
-merged_dataframe = format.catalog_and_wikipedia_merge(dataFramePDFs, wikiMovieList)
 
-print('Getting box info from each film')
-a = 0
+
+print('Getting box info from each film from wikipedia')
 wikiBaseURL = 'https://en.wikipedia.org/'
 wikipediaInfo = pd.DataFrame()
-for i, row in merged_dataframe.iterrows():
-    if row['wiki_url'] != "":
-        a = a + 1
-        print(f"Index {a} | Película: {row['spa_title']} | URL: {row['wiki_url']}")
-        wikiBox = navigation.getinfoBox(wikiBaseURL + row['wiki_url'])
-        Info = {k: format.cleanBox(v) for k, v in wikiBox.items() if v}
-        Info = pd.DataFrame(Info.items()).transpose()
-        new_header = Info.iloc[0]  # grab the first row for the header
-        Info = Info[1:]  # take the data less the header row
-        Info.columns = new_header  # set the header row as the df header
-        Info['year'] = row['year']
-        Info['spa_title'] = row['spa_title']
-        Info['eng_title'] = row['eng_title']
-        wikipediaInfo = pd.concat([wikipediaInfo, Info], axis=0, ignore_index=True)
+for i, row in wikiMovieList.iterrows():
+    if row['Link'] is not None:
+        print(f"Index: {i} | Movie: {row['Movie']} | Year: {row['year']} | URL: {row['Link']}")
+        wikiBox = navigation.getinfoBox(wikiBaseURL + row['Link'])
+        if wikiBox is not None:
+            Info = {k: format.cleanBox(v) for k, v in wikiBox.items() if v}
+            Info = pd.DataFrame(Info.items()).transpose()
+            new_header = Info.iloc[0]  # grab the first row for the header
+            Info = Info[1:]  # take the data less the header row
+            Info.columns = new_header  # set the header row as the df header
+            Info['Movie'] = row['Movie']
+            Info['year'] = row['year']
+            wikipediaInfo = pd.concat([wikipediaInfo, Info], axis=0, ignore_index=True)
+
+merged_dataframe = format.catalog_and_wikipedia_merge(dataFramePDFs, wikipediaInfo)
 
 finalDataframe = pd.merge(merged_dataframe, wikipediaInfo, on=['spa_title', 'eng_title', 'year'], how='left')
 
