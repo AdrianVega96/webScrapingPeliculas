@@ -44,24 +44,8 @@ dataFramePDFs.to_csv('films.csv')
 wikiMovieList = navigation.WikiList()
 wikiMovieList.to_csv('WikiMovieList.csv')
 
-
-
 print('Getting box info from each film from wikipedia')
-wikiBaseURL = 'https://en.wikipedia.org/'
-wikipediaInfo = pd.DataFrame()
-for i, row in wikiMovieList.iterrows():
-    if row['Link'] is not None:
-        print(f"Index: {i} | Movie: {row['Movie']} | Year: {row['year']} | URL: {row['Link']}")
-        wikiBox = navigation.getinfoBox(wikiBaseURL + row['Link'])
-        if wikiBox is not None:
-            Info = {k: format.cleanBox(v) for k, v in wikiBox.items() if v}
-            Info = pd.DataFrame(Info.items()).transpose()
-            new_header = Info.iloc[0]  # grab the first row for the header
-            Info = Info[1:]  # take the data less the header row
-            Info.columns = new_header  # set the header row as the df header
-            Info['Movie'] = row['Movie']
-            Info['year'] = row['year']
-            wikipediaInfo = pd.concat([wikipediaInfo, Info], axis=0, ignore_index=True)
+wikipediaInfo = navigation.getInfoFromWikiMoviList(wikiMovieList)
 
 merged_dataframe = format.catalog_and_wikipedia_merge(dataFramePDFs, wikipediaInfo)
 

@@ -7,7 +7,7 @@ from urllib.error import HTTPError
 from urllib.error import URLError
 from pytrends.request import TrendReq
 import ssl
-import re
+import source.functions.format as format
 
 def findPDF(SoupInst, keystring=None):
     """
@@ -174,4 +174,15 @@ def WikiList():
     WikiMovieList=pd.concat(c, ignore_index=True)
     return WikiMovieList
 
+def getInfoFromWikiMoviList(wikiMovieList):
+    wikiBaseURL = 'https://en.wikipedia.org/'
+    wikipediaInfo = pd.DataFrame()
+    for i, row in wikiMovieList.iterrows():
+        if row['Link'] is not None:
+            print(f"Index: {i} | Movie: {row['Movie']} | Year: {row['year']} | URL: {row['Link']}")
+            wikiBox = getinfoBox(wikiBaseURL + row['Link'])
+            if wikiBox is not None:
+                Info = format.formatBoxInfo(wikiBox, row)
+                wikipediaInfo = pd.concat([wikipediaInfo, Info], axis=0, ignore_index=True)
+    return wikipediaInfo
 

@@ -70,5 +70,12 @@ def cleanBox(v):
     clean = list(filter(None,clean.splitlines()))
     return clean
 
-    Info = {k: cleanBox(v) for k, v in ToClean.items() if v}
+def formatBoxInfo(wikiBox, row):
+    Info = {k: cleanBox(v) for k, v in wikiBox.items() if v}
+    Info = pd.DataFrame(Info.items()).transpose()
+    new_header = Info.iloc[0]  # grab the first row for the header
+    Info = Info[1:]  # take the data less the header row
+    Info.columns = new_header  # set the header row as the df header
+    Info['Movie'] = row['Movie']
+    Info['year'] = row['year']
     return Info
