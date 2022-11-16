@@ -239,8 +239,6 @@ def WikiList():
         """
         ssl._create_default_https_context = ssl._create_unverified_context
         html = urlopen(URL)
-        #bs = BeautifulSoup(html.read(), 'html.parser')
-        #r = requests.get(URL)
         soup = BeautifulSoup(html.read(), "html.parser")
         tbl = soup.find_all("table", {"class":"wikitable sortable"})
 

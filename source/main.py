@@ -38,16 +38,18 @@ for year, ulrss in pdflinks:
   print(ulrss)
   dataFramePDFs = pd.concat([dataFramePDFs, pdf.getPDF(url+ulrss, year)], ignore_index=True)
 
-dataFramePDFs.to_csv('films.csv')
-
 ##########################################  Scrappear Wikipedia  ################################################
 wikiMovieList = navigation.WikiList()
-wikiMovieList.to_csv('WikiMovieList.csv')
 
 print('Getting box info from each film from wikipedia')
 wikipediaInfo = navigation.getInfoFromWikiMoviList(wikiMovieList)
 
 merged_dataframe = format.catalog_and_wikipedia_merge(dataFramePDFs, wikipediaInfo)
 
-merged_dataframe.to_csv('../dataset/dataset.csv')
+merged_dataframe['es_catalog'] = 0
+
+merged_dataframe.loc[(merged_dataframe['spa_title'].isna())
+                     & (merged_dataframe['eng_title'].isna()), 'es_catalog'] = 1
+
+merged_dataframe.to_csv('dataset/Filmografia_occidental_entre_2009-2015.csv')
 
