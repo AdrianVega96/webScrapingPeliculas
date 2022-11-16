@@ -1,9 +1,9 @@
 import pandas as pd
 import re
-
 import source.functions.pdf_treatment as pdf
 import source.functions.format as format
 import source.functions.navigation as navigation
+
 
 url = "https://www.culturaydeporte.gob.es"
 
@@ -27,7 +27,7 @@ pdfsURL = navigation.findLink(webCatalogo, keystring="descargas-catalogo")
 # Get catalog downloads section URL
 webPDFs = navigation.parseHTML2Soup(url + pdfsURL[0])
 
-# Get anual catalog URLs - Filtrar los enlaces - no hay 2014/2015/2016
+# Get anual catalog URLs - Filtrar los enlaces
 print("Getting PDF URLs")
 pdflinks = navigation.pdfURLs(url, webPDFs)
 
@@ -49,15 +49,5 @@ wikipediaInfo = navigation.getInfoFromWikiMoviList(wikiMovieList)
 
 merged_dataframe = format.catalog_and_wikipedia_merge(dataFramePDFs, wikipediaInfo)
 
-merged_dataframe.to_csv('dataset/dataset.csv')
+merged_dataframe.to_csv('../dataset/dataset.csv')
 
-##################################################  Experiment ##########################################
-#trend={}
-#for index, row in DataFramePDFs.iterrows():
-    #print(row["spa_title"])
-    #trend[index]=popularity(row["spa_title"])
-#
-    #if index==100:
-#break
-
-#Prueba

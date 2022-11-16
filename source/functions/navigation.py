@@ -11,9 +11,15 @@ import source.functions.format as format
 
 def findPDF(SoupInst, keystring=None):
     """
-       Find all links from a soup taking into account the tag text.
-       If you provide keystring, filter the result
-       """
+        This function Find all links from a soup taking into account the tag text
+
+        inputs:
+            SoupInst --> bs4.element.  Each element is a line of a page
+            keystring --> String.  Key word to search. If you provide keystring, filter the result
+
+        outputs:
+            tmp --> List with the links
+    """
     tmp = None
     # find links. Filter all tag a and find the href inside
     for link in SoupInst.find_all('a', href=True):
@@ -29,8 +35,17 @@ def findPDF(SoupInst, keystring=None):
 
 def findLink(SoupInst, keystring=None):
     """
-    Find all links from a soup. If you provide keystring, filter the result
+        This function Find all links from a soup taking into account the tag text.
+        Similar to the previous function however
+
+        inputs:
+            SoupInst --> bs4.element.  Each element is a line of a page
+            keystring --> String.  Key word to search. If you provide keystring, filter the result
+
+        outputs:
+            tmp --> List with the links
     """
+
     # find links. Filter all tag a and find the href inside
     links = set([link['href'] for link in SoupInst.find_all('a', href=True)])
     tmp = []
@@ -54,6 +69,16 @@ def findLink(SoupInst, keystring=None):
 # -------------------------------------------------------------------------------------
 
 def parseHTML(url):
+    """
+        This function store the html  source code of the URL data into a variable
+
+        inputs:
+            url --> string.  URL We want to scrap
+
+
+        outputs:
+            html --> HTML data from the the URL provided
+    """
     try:
         html = urlopen(url)
     except HTTPError as e:
@@ -66,6 +91,17 @@ def parseHTML(url):
 # -------------------------------------------------------------------------------------
 
 def pdfURLs(url, webPDFs):
+    """
+        This function store the html  source code of the URL data into a variable and process the information to
+        give back the PDFs url to later process
+
+        inputs:
+            url --> string.  original url to scrap
+            webPDFs --> bs4.element. Element contains the soup of the pages where all PDF are
+
+        outputs:
+            final --> list. List of list that contains the year and the url
+    """
     currentDateTime = datetime.datetime.now()
     date = currentDateTime.date()
     final = []
@@ -86,6 +122,16 @@ def pdfURLs(url, webPDFs):
 # -------------------------------------------------------------------------------------
 
 def parseHTML2Soup(url):
+    """
+            This function store the html  source code and convert it into a soup
+
+            inputs:
+                url --> string.  original url to scrap
+
+
+            outputs:
+                bs --> bs4.element
+    """
     ssl._create_default_https_context = ssl._create_unverified_context
     try:
         html = urlopen(url)
@@ -101,6 +147,18 @@ def parseHTML2Soup(url):
 # -------------------------------------------------------------------------------------
 
 def popularity(kw):
+    """
+        This a function test to see if we were able to use the google trend API to complete the final
+        dataset. currently out of scope
+
+                inputs:
+                    kw --> string.  key word to search
+
+
+                outputs:
+                    data --> Dataframe with the information of google trends
+    """
+
     # Establish Pytrends connection
     Pytrend = TrendReq(retries=2, backoff_factor=0.1, requests_args={'verify':False})
 
@@ -119,6 +177,17 @@ def popularity(kw):
 # -------------------------------------------------------------------------------------
 
 def getinfoBox(url):
+    """
+          From the url reference of Wikipedia it gets the information realated to the infobox
+          https://en.wikipedia.org/wiki/Help:Infobox
+
+                   inputs:
+                       url --> string.  Reference URL
+
+
+                   outputs:
+                       ToClean --> Dictionary to with the information to clean
+    """
     r = requests.get(url)
     soup = BeautifulSoup(r.text, "lxml")
     tbl = soup.find("table", {"class": "infobox vevent"})
@@ -141,10 +210,33 @@ def getinfoBox(url):
 # -------------------------------------------------------------------------------------
 
 def WikiList():
+    """
+         From the url reference of Wikipedia it gets the information about the movies between 2009 and 2015
+         from spain, EEUU, France, Italy, Mexico, Argentina.
+
+         inputs:
+            url --> None
+
+
+         outputs:
+            WikiMovieList --> Return a dataframe with the information about the movie, year and URL
+    """
     year=list(range(2009,2016))
     OrigURL="https://en.wikipedia.org/wiki/"
 
     def wikiMovies(URL,year):
+        """
+                 From the url reference of Wikipedia, URL that point to a year and country, get all the movies
+                 from that time and place
+
+                 inputs:
+                    url --> string
+                    year--> int
+
+
+                 outputs:
+                    df --> Return a dataframe with the information about the movie, year and URL
+        """
         ssl._create_default_https_context = ssl._create_unverified_context
         html = urlopen(URL)
         #bs = BeautifulSoup(html.read(), 'html.parser')
@@ -175,6 +267,17 @@ def WikiList():
     return WikiMovieList
 
 def getInfoFromWikiMoviList(wikiMovieList):
+    """
+        Complete the information of the dataframe wikiMovieList witht the information of the information box
+        from the url reference of each movie we scrapped in wikipedia
+
+             inputs:
+                wikiMovieList --> Dataframe. Movie,year, URL
+
+
+             outputs:
+                wikipediaInfo --> Dataframe. Infobox + movie + year+ url
+   """
     wikiBaseURL = 'https://en.wikipedia.org/'
     wikipediaInfo = pd.DataFrame()
     for i, row in wikiMovieList.iterrows():

@@ -5,12 +5,21 @@ import ssl
 from urllib.request import urlopen
 from urllib.error import HTTPError
 from urllib.error import URLError
-
 import source.functions.format as format
-
 import itertools
 
 def getPDF(url, year):
+    """
+        it retieve the hml info from the pdf url and cleaned each page to finally stored into a dataframe
+
+        inputs:
+            url --> Strin. URL of the PDF to get the info
+
+
+        outputs:
+            df --> Dataframe. spanish title + english title + year from PDF of the goverment
+    """
+
     ssl._create_default_https_context = ssl._create_unverified_context
 
     try:
@@ -25,6 +34,16 @@ def getPDF(url, year):
     return df
 
 def getAllPages(response, year):
+    """
+        it cleans the PDFs and store the information into a dataframe. It calls CleanPDf
+
+        inputs:
+            response --> Html response from the PDF
+
+
+        outputs:
+            df --> Dataframe. spanish title + english title + year from PDF of the goverment
+    """
     # Variables y constantes
     CleanPDf = []  # Almaceno tuplas (titulocastellano, titulo ingles, errores[n])
     # Index show me the type of analisis I need to apply to my dpf. If index is 1 aply clean to indexPDFs and not Advance
