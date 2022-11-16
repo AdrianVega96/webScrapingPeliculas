@@ -75,10 +75,11 @@ def catalog_and_wikipedia_merge(gob_catalog_dataframe, wiki_dataframe):
     wiki_dataframe['Movie'] = wiki_dataframe['Movie'].str.strip()#Remove empty space
     gob_catalog_dataframe['spa_title'] = gob_catalog_dataframe['spa_title'].str.strip()#Remove empty space
     gob_catalog_dataframe['eng_title'] = gob_catalog_dataframe['eng_title'].str.strip()#Remove empty space
-    wiki_dataframe.rename(columns={'Movie': 'spa_title'}, inplace=True)
-    films_with_wiki_url = pd.merge(gob_catalog_dataframe, wiki_dataframe, on=['spa_title', 'year'], how='left')
-    wiki_dataframe.rename(columns={'spa_title': 'eng_title'}, inplace=True)
-    films_with_wiki_url = pd.merge(films_with_wiki_url, wiki_dataframe, on=['eng_title', 'year'], how='left')
+    films_with_wiki_url_spa = pd.merge(gob_catalog_dataframe, wiki_dataframe, left_on=['spa_title', 'year'],
+                                   right_on=['Movie', 'year'], how='left')
+    films_with_wiki_url_eng = pd.merge(gob_catalog_dataframe, wiki_dataframe, left_on=['eng_title', 'year'],
+                                   right_on=['Movie', 'year'], how='left')
+    films_with_wiki_url = pd.concat([films_with_wiki_url_spa, films_with_wiki_url_eng], ignore_index = True)
     return films_with_wiki_url
 
 def cleanBox(v):
