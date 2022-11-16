@@ -7,7 +7,7 @@ def cleanPages(page, numpage, startPage):
         inputs:
             page --> list of strings.  Each element is a line of a page
             numpage --> Int.  To know the exact page of the whole pdf document
-            startPage --> Int.  To know from where to start the extraction
+            startPage --> Int.  To know from where to start the extraction.
 
         outputs:
             newlist --> List of tuplas. Each tuple has the following
