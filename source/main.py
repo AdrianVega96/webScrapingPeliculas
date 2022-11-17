@@ -51,5 +51,5 @@ merged_dataframe['es_catalog'] = 0
 merged_dataframe.loc[(merged_dataframe['spa_title'].isna())
                      & (merged_dataframe['eng_title'].isna()), 'es_catalog'] = 1
 
-merged_dataframe.to_csv('dataset/Filmografia_occidental_entre_2009-2015__Titulos_y_ficha_tecnica.csv')
+merged_dataframe.to_csv('dataset/Filmografia_occidental_entre_2009-2015_Titulos_y_ficha_tecnica.csv')
 
