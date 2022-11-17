@@ -76,9 +76,9 @@ def catalog_and_wikipedia_merge(gob_catalog_dataframe, wiki_dataframe):
     gob_catalog_dataframe['spa_title'] = gob_catalog_dataframe['spa_title'].str.strip()#Remove empty space
     gob_catalog_dataframe['eng_title'] = gob_catalog_dataframe['eng_title'].str.strip()#Remove empty space
     films_with_wiki_url_spa = pd.merge(gob_catalog_dataframe, wiki_dataframe, left_on=['spa_title', 'year'],
-                                   right_on=['Movie', 'year'], how='left')
+                                   right_on=['Movie', 'year'], how='outer')
     films_with_wiki_url_eng = pd.merge(gob_catalog_dataframe, wiki_dataframe, left_on=['eng_title', 'year'],
-                                   right_on=['Movie', 'year'], how='left')
+                                   right_on=['Movie', 'year'], how='outer')
     films_with_wiki_url = pd.concat([films_with_wiki_url_spa, films_with_wiki_url_eng], ignore_index = True)
     return films_with_wiki_url
 
